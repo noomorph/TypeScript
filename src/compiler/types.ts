@@ -3458,6 +3458,7 @@ namespace ts {
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;  // Always combine with strict property
+        avoidFileWrite?: boolean;
         baseUrl?: string;
         charset?: string;
         checkJs?: boolean;

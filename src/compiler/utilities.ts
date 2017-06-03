@@ -3502,6 +3502,10 @@ namespace ts {
         return options.watch && options.hasOwnProperty("watch");
     }
 
+    export function isAvoidFileWriteSet(options: CompilerOptions) {
+        return options.avoidFileWrite;
+    }
+
     export function getCheckFlags(symbol: Symbol): CheckFlags {
         return symbol.flags & SymbolFlags.Transient ? (<TransientSymbol>symbol).checkFlags : 0;
     }

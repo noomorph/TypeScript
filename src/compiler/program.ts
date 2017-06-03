@@ -136,10 +136,26 @@ namespace ts {
             const mtimeBefore = sys.getModifiedTime(fileName);
 
             if (mtimeBefore) {
-                const fingerprint = outputFingerprints.get(fileName);
+                let fingerprint = outputFingerprints.get(fileName);
                 // If output has not been changed, and the file has no external modification
-                if (fingerprint &&
-                    fingerprint.byteOrderMark === writeByteOrderMark &&
+
+                if (!fingerprint) {
+                    const existingContent = sys.readFile(fileName);
+
+                    fingerprint = {
+                        hash: sys.createHash(existingContent),
+                        byteOrderMark: writeByteOrderMark,
+                        mtime: mtimeBefore
+                    };
+
+                    outputFingerprints.set(fileName, fingerprint);
+
+                    if (existingContent === data) {
+                        return;
+                    }
+                }
+
+                if (fingerprint.byteOrderMark === writeByteOrderMark &&
                     fingerprint.hash === hash &&
                     fingerprint.mtime.getTime() === mtimeBefore.getTime()) {
                     return;
@@ -162,7 +178,7 @@ namespace ts {
                 performance.mark("beforeIOWrite");
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
+                if ((isWatchSet(options) || isAvoidFileWriteSet(options)) && sys.createHash && sys.getModifiedTime && sys.readFile) {
                     writeFileIfUpdated(fileName, data, writeByteOrderMark);
                 }
                 else {

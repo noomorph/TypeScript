@@ -228,6 +228,13 @@ namespace ts {
             description: Diagnostics.Do_not_emit_outputs,
         },
         {
+            name: "avoidFileWrite",
+            type: "boolean",
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Do_not_emit_outputs,
+        },
+        {
             name: "importHelpers",
             type: "boolean",
             category: Diagnostics.Basic_Options,
